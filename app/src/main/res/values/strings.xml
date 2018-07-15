@@ -6,5 +6,12 @@
     <string name="recipe_ingredients">%d ingredients</string>
     <string name="recipe_steps">%d steps</string>
 
+    <string name="recipe_steps_intent_key">recipe_steps_intent_key</string>
+    <string name="recipe_steps_ingredients_format">%s - %s %s \n</string>
+
+
+    <string name="recipe_step_recipe_intent_key">recipe_step_recipe_intent_key</string>
+    <string name="recipe_step_selected_step_intent_key">recipe_step_selected_step_intent_key</string>
+
 
 </resources>

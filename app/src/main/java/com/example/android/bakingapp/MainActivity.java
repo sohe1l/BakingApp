@@ -1,6 +1,7 @@
 package com.example.android.bakingapp;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.annotation.Nullable;
@@ -11,21 +12,26 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.android.bakingapp.adapter.RecipesAdapter;
+import com.example.android.bakingapp.adapter.RecyclerClickListener;
 import com.example.android.bakingapp.model.Recipe;
 import com.example.android.bakingapp.network.GetDataService;
 import com.example.android.bakingapp.network.RetrofitClientInstance;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+    implements RecyclerClickListener{
 
-    private RecipesAdapter mRecipesAdapter;
-    private RecyclerView mRecipesRV;
+    @BindView(R.id.rv_recipes) RecyclerView mRecipesRV;
     ProgressDialog progressDialog;
+
+    private List<Recipe> recipesList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
+        ButterKnife.bind(this);
 
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Loading....");
@@ -51,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
                 progressDialog.dismiss();
 
                 Log.d("Main", response.toString());
-
-                generateDataList(response.body());
+                recipesList = response.body();
+                generateDataList();
 
             }
 
@@ -68,16 +75,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void generateDataList(List<Recipe> recipesList) {
+    private void generateDataList() {
 
-        if(recipesList == null){
-            Log.d("Main", "Recipes List is NULL");
-        }else{
-            Log.d("Main", "Recipes List is NOT NULL");
-        }
-
-        mRecipesRV = findViewById(R.id.rv_recipes);
-        mRecipesAdapter = new RecipesAdapter(this, recipesList);
+        RecipesAdapter mRecipesAdapter = new RecipesAdapter(this, recipesList, this);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         mRecipesRV.setLayoutManager(layoutManager);
@@ -86,6 +86,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
+    @Override
+    public void onRecyclerItemClicked(int index) {
+        Intent recipeSteps = new Intent(this, RecipeStepsActivity.class);
+        recipeSteps.putExtra(getString(R.string.recipe_steps_intent_key), recipesList.get(index));
+        startActivity(recipeSteps);
+    }
 }

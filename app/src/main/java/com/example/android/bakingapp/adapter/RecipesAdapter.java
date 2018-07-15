@@ -19,14 +19,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder> {
+public class RecipesAdapter extends RecyclerView.Adapter<RecipeViewHolder> {
 
 
 
     private List<Recipe> recipes;
     private Context context;
 
-    public RecipesAdapter(Context context, List<Recipe> recipes){
+    final private RecyclerClickListener clickListener;
+
+    public RecipesAdapter(Context context, List<Recipe> recipes, RecyclerClickListener clickListener){
+        this.clickListener = clickListener;
         this.context = context;
         this.recipes = recipes;
     }
@@ -39,12 +42,11 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
 
         Context context = parent.getContext();
 
-
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View view = inflater.inflate(R.layout.recipe_item, parent, false);
 
-        RecipeViewHolder viewHolder = new RecipeViewHolder(view);
+        RecipeViewHolder viewHolder = new RecipeViewHolder(view, context, clickListener);
 
         return viewHolder;
 
@@ -54,7 +56,7 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
 
-        holder.bind(position, context);
+        holder.bind(recipes.get(position) , context);
     }
 
 
@@ -64,34 +66,6 @@ public class RecipesAdapter extends RecyclerView.Adapter<RecipesAdapter.RecipeVi
             return recipes.size();
         }else{
             return 0;
-        }
-    }
-
-
-
-
-
-    class RecipeViewHolder extends RecyclerView.ViewHolder{
-
-        @BindView(R.id.tv_recipe_name) TextView mRecipeName;
-        @BindView(R.id.tv_recipe_ingredients) TextView mIngredients;
-        @BindView(R.id.tv_recipe_servings) TextView mServings;
-        @BindView(R.id.tv_recipe_steps) TextView mSteps;
-
-        public RecipeViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-
-        }
-
-        public void bind(int p, Context context){
-
-            Recipe r = recipes.get(p);
-            mRecipeName.setText( r.getName());
-            mIngredients.setText( context.getString(R.string.recipe_ingredients, r.getIngredients().size()) );
-            mServings.setText( context.getString(R.string.recipe_servings, r.getServings() ));
-            mSteps.setText( context.getString(R.string.recipe_steps, r.getIngredients().size()) );
-
         }
     }
 
