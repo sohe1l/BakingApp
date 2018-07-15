@@ -1,11 +1,13 @@
 package com.example.android.bakingapp;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Debug;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -41,12 +43,12 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_main);
 
+
         ButterKnife.bind(this);
 
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Loading....");
         progressDialog.show();
-
 
 
         /*Create handle for the RetrofitInstance interface*/
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity
 
         RecipesAdapter mRecipesAdapter = new RecipesAdapter(this, recipesList, this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, getResources().getInteger(R.integer.recipes_col_count));
         mRecipesRV.setLayoutManager(layoutManager);
         mRecipesRV.setHasFixedSize(true);
         mRecipesRV.setAdapter(mRecipesAdapter);

@@ -43,6 +43,8 @@ public class RecipeStepsActivity extends AppCompatActivity implements RecyclerCl
             mStepsRV.setHasFixedSize(true);
             mStepsRV.setAdapter(recipeStepsAdapter);
 
+            //Update Action Bar Text
+            setTitle(recipe.getName());
         }
     }
 

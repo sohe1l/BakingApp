@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".RecipeStepsActivity">
 
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recipe_steps_fragment"
+        android:name="com.example.android.bakingapp.ui.RecipeStepsFragment"/>
+
+
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"

@@ -31,14 +31,8 @@ implements View.OnClickListener{
     }
 
     public void bind(Step step, Context context){
-
-        if(step == null){
-            Log.d("RSVH", "step is null");
-        }else{
-            tv_desc.setText( step.getDescription());
-            tv_short_desc.setText( step.getShortDescription());
-        }
-
+        tv_desc.setText( step.getDescription());
+        tv_short_desc.setText( step.getShortDescription());
     }
 
     @Override
