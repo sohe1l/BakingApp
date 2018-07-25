@@ -41,6 +41,7 @@
         <!-- android:name="android.support.PARENT_ACTIVITY" -->
         <!-- android:value="com.example.android.bakingapp.recipestepListActivity" /> -->
         <!-- </activity> -->
+
         <activity android:name=".RecipeStepsActivity" />
         <activity android:name=".RecipeStepActivity"></activity>
     </application>

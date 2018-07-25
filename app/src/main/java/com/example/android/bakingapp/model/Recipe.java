@@ -130,14 +130,12 @@ public class Recipe implements Parcelable {
         dest.writeString(image);
     }
 
-    public String getIngredientsList(Context context){
-
+    public String getIngredientsList(String format){
         StringBuilder res = new StringBuilder("");
 
         for (Ingredient i: ingredients) {
             res.append(
-                    String.format(context.getString(R.string.recipe_steps_ingredients_format),
-                            i.getIngredient(), i.getQuantity(), i.getMeasure())
+                    String.format(format, i.getIngredient(), String.valueOf(i.getQuantity()), i.getMeasure())
             );
 
         }
