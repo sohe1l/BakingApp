@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
 
     <android.support.constraint.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,7 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context="ui.RecipeStepFragment">
-
 
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/player_view"
@@ -24,37 +21,24 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_recipe_step_short_desc"
-            android:textSize="16sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:id="@+id/tv_recipe_step_short_desc_frag"
+            style="@style/text_title"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/player_view"
             tools:text="Short Desc" />
 
         <TextView
             android:id="@+id/tv_recipe_step_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            style="@style/text_default"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_recipe_step_short_desc"
+            app:layout_constraintTop_toBottomOf="@+id/tv_recipe_step_short_desc_frag"
             tools:text="Main Description" />
 
         <Button
             android:id="@+id/recipe_step_prev"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_margin="8dp"
             android:text="Previous Step"
             app:layout_constraintTop_toBottomOf="@+id/tv_recipe_step_desc"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -64,11 +48,7 @@
             android:id="@+id/recipe_step_next"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_margin="8dp"
             android:text="Next Step"
             app:layout_constraintTop_toBottomOf="@+id/tv_recipe_step_desc"
             app:layout_constraintEnd_toEndOf="parent"

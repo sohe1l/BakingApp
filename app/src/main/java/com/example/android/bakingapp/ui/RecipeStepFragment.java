@@ -47,7 +47,7 @@ public class RecipeStepFragment extends Fragment {
     @BindView(R.id.player_view)
     PlayerView playerView;
 
-    @BindView(R.id.tv_recipe_step_short_desc)
+    @BindView(R.id.tv_recipe_step_short_desc_frag)
     TextView mShortDescTV;
 
     @BindView(R.id.tv_recipe_step_desc)
