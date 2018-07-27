@@ -5,31 +5,41 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.android.bakingapp.MainActivity;
 import com.example.android.bakingapp.R;
+
+import java.util.Set;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                String title, String ingredients,
-                                int appWidgetId) {
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager, int appWidgetId) {
 
-
-        if(title.equals("")){
-            title = context.getString(R.string.app_name);
-            ingredients = context.getString(R.string.appwidget_text);
-        }
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String title = prefs.getString(context.getString(R.string.widget_title_key), context.getString(R.string.app_name));
+        Set<String> ingredientsSet = prefs.getStringSet(context.getString(R.string.widget_ing_key), null);
 
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.recipe_widget_provider);
 
         views.setTextViewText(R.id.appwidget_title, title);
-        views.setTextViewText(R.id.appwidget_text, ingredients);
+
+        Intent lvIntent = new Intent(context, ListViewWidgetService.class);
+        try{
+            String ingredients[] = new String[ingredientsSet.size()];
+            ingredients = ingredientsSet.toArray(ingredients);
+            lvIntent.putExtra(context.getString(R.string.widget_ing_key), ingredients);
+        }catch(NullPointerException e){
+            e.printStackTrace();
+        }
+        views.setRemoteAdapter(R.id.listViewWidget, lvIntent);
 
 
         Intent intent = new Intent(context, SelectRecipeActivity.class);
@@ -45,15 +55,14 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager,"", "",  appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 
 
-    public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
-                                          String title, String ingredients, int[] appWidgetIds) {
+    public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, title, ingredients, appWidgetId);
+            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
     }
 

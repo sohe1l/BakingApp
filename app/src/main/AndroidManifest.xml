@@ -21,29 +21,23 @@
             </intent-filter>
         </activity>
 
-        <!-- <activity -->
-        <!-- android:name=".recipestepListActivity" -->
-        <!-- android:label="@string/app_name" -->
-        <!-- android:theme="@style/AppTheme.NoActionBar"> -->
-        <!-- <intent-filter> -->
-        <!-- <action android:name="android.intent.action.MAIN" /> -->
-
-
-        <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-        <!-- </intent-filter> -->
-        <!-- </activity> -->
-        <!-- <activity -->
-        <!-- android:name=".recipestepDetailActivity" -->
-        <!-- android:label="@string/title_recipestep_detail" -->
-        <!-- android:parentActivityName=".recipestepListActivity" -->
-        <!-- android:theme="@style/AppTheme.NoActionBar"> -->
-        <!-- <meta-data -->
-        <!-- android:name="android.support.PARENT_ACTIVITY" -->
-        <!-- android:value="com.example.android.bakingapp.recipestepListActivity" /> -->
-        <!-- </activity> -->
-
         <activity android:name=".RecipeStepsActivity" />
         <activity android:name=".RecipeStepActivity" />
+        <activity android:name=".widget.SelectRecipeActivity"/>
+
+
+        <service android:name=".widget.WidgetUpdateService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="learn.tasha.widgetexample.widgetupdateservice.update_app_widget_list"/>
+            </intent-filter>
+        </service>
+
+
+
+        <service
+            android:name=".widget.ListViewWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver android:name=".widget.RecipeWidgetProvider">
             <intent-filter>
@@ -55,7 +49,6 @@
                 android:resource="@xml/recipe_widget_provider_info" />
         </receiver>
 
-        <activity android:name=".widget.SelectRecipeActivity"></activity>
     </application>
 
 </manifest>

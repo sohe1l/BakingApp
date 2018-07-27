@@ -7,7 +7,9 @@ import android.os.Parcelable;
 import com.example.android.bakingapp.R;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Recipe implements Parcelable {
 
@@ -141,5 +143,20 @@ public class Recipe implements Parcelable {
         }
 
         return res.toString();
+    }
+
+
+    public Set<String> getIngredientsSet(String format){
+
+        Set<String> set = new HashSet<String>();
+
+
+        for (Ingredient i: ingredients) {
+            set.add(
+                    String.format(format, i.getIngredient(), String.valueOf(i.getQuantity()), i.getMeasure())
+            );
+        }
+
+        return set;
     }
 }

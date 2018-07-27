@@ -43,6 +43,13 @@ public class RecipeStepFragment extends Fragment {
     private final String RECIPE_BUNDLE_KEY = "recipe_bundle_key";
     private final String RECIPE_STEP_BUNDLE_KEY = "recipe_step_bundle_key";
 
+    private final String EXO_POSITION_BUNDLE_KEY = "exo_position_bundle_key";
+    private final String EXO_PLAY_WHEN_READY_BUNDLE_KEY = "exo_play_when_ready_bundle_key";
+
+    private long exo_position;
+    private boolean exo_play_when_ready;
+
+
 
     @BindView(R.id.player_view)
     PlayerView playerView;
@@ -75,6 +82,8 @@ public class RecipeStepFragment extends Fragment {
         if(savedInstanceState != null) {
             recipe = savedInstanceState.getParcelable(RECIPE_BUNDLE_KEY);
             stepIndex = savedInstanceState.getInt(RECIPE_STEP_BUNDLE_KEY);
+            exo_position = savedInstanceState.getLong(EXO_POSITION_BUNDLE_KEY);
+            exo_play_when_ready = savedInstanceState.getBoolean(EXO_PLAY_WHEN_READY_BUNDLE_KEY);
         }
 
         View view = inflater.inflate(R.layout.fragment_recipe_step, container, false);
@@ -87,6 +96,38 @@ public class RecipeStepFragment extends Fragment {
         updateInfo();
 
         return view;
+    }
+
+
+    private void updateInfo() {
+        try{
+            step = recipe.getSteps().get(stepIndex);
+            mShortDescTV.setText(step.getShortDescription());
+            mDescTV.setText(step.getDescription());
+            //Update Action Bar Text
+            mUpdateActionBarTitle.updateTitle(String.format(getString(R.string.recipe_step_title_bar), recipe.getName(), stepIndex+1 ));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((Util.SDK_INT <= 23 || player == null)) {
+            showVideo();
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Util.SDK_INT > 23) {
+            showVideo();
+        }
     }
 
 
@@ -107,10 +148,16 @@ public class RecipeStepFragment extends Fragment {
     }
 
 
-    private void showVideo(String url){
+    private void showVideo(){
         if(player != null){
             player.release();
         }
+
+        if(step == null){
+            return;
+        }
+
+        String url = step.getVideoURL();
 
         if(url.equals("")){
             playerView.setVisibility(View.GONE);
@@ -138,23 +185,11 @@ public class RecipeStepFragment extends Fragment {
 
         MediaSource videoSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
         player.prepare(videoSource);
+
+        player.seekTo(exo_position);
+        player.setPlayWhenReady(exo_play_when_ready); // when enough data is buffered
     }
 
-
-    private void updateInfo() {
-        try{
-            step = recipe.getSteps().get(stepIndex);
-            mShortDescTV.setText(step.getShortDescription());
-            mDescTV.setText(step.getDescription());
-            showVideo(step.getVideoURL());
-
-            //Update Action Bar Text
-            mUpdateActionBarTitle.updateTitle(String.format(getString(R.string.recipe_step_title_bar), recipe.getName(), stepIndex+1 ));
-
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }
 
 //    public void nextStep(View view) {
 //
@@ -176,17 +211,23 @@ public class RecipeStepFragment extends Fragment {
     private View.OnClickListener changeStep = new View.OnClickListener() {
         @Override
         public void onClick(View v){
+
+            exo_position = 0;
+            exo_play_when_ready = false;
+
             switch (v.getId()) {
                 case R.id.recipe_step_next:
                     if(stepIndex < recipe.getSteps().size() - 1 ){
                         stepIndex++;
                         updateInfo();
+                        showVideo();
                     }
                     break;
                 case R.id.recipe_step_prev:
                     if(stepIndex > 0){
                         stepIndex--;
                         updateInfo();
+                        showVideo();
                     }
                     break;
             }
@@ -197,9 +238,7 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(player != null){
-            player.release();
-        }
+        releasePlayer();
     }
 
     public void setRecipe(Recipe recipe) {
@@ -214,5 +253,37 @@ public class RecipeStepFragment extends Fragment {
     public void onSaveInstanceState(Bundle currentState) {
         currentState.putParcelable(RECIPE_BUNDLE_KEY, recipe);
         currentState.putInt(RECIPE_STEP_BUNDLE_KEY, stepIndex);
+        currentState.putLong(EXO_POSITION_BUNDLE_KEY, exo_position);
+        currentState.putBoolean(EXO_PLAY_WHEN_READY_BUNDLE_KEY, exo_play_when_ready);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        exo_position = player.getCurrentPosition();
+        exo_play_when_ready = player.getPlayWhenReady();
+        if (Util.SDK_INT <= 23) {
+            releasePlayer();
+        }
+
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (Util.SDK_INT > 23) {
+            releasePlayer();
+        }
+    }
+
+    private void releasePlayer(){
+        if(player != null){
+            player.release();
+        }
+    }
+
+
+
+
 }

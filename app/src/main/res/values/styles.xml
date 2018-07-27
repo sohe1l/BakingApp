@@ -27,11 +27,20 @@
 
 
     <style name="text_title" parent="@style/text_default">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+
+    <!--Widget Styles-->
+    <style name="widget_text_title" parent="@style/text_title">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="widget_text_default" parent="@style/text_default">
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
 
 
 

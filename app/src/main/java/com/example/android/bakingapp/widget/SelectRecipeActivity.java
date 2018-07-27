@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -82,12 +84,16 @@ public class SelectRecipeActivity extends AppCompatActivity  implements Recycler
     @Override
     public void onRecyclerItemClicked(int index) {
         Recipe recipe = recipesList.get(index);
-        String recipeTitle = recipe.getName();
-        String recipeIng = recipe.getIngredientsList(getString(R.string.recipe_steps_ingredients_format));
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor prefEditor = sp.edit();
+        prefEditor.putString(getString(R.string.widget_title_key), recipe.getName());
+        prefEditor.putStringSet(getString(R.string.widget_ing_key), recipe.getIngredientsSet(getString(R.string.recipe_steps_ingredients_format)) );
+        prefEditor.apply();
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
-        RecipeWidgetProvider.updateRecipeWidgets(this, appWidgetManager, recipeTitle, recipeIng, appWidgetIds);
+        RecipeWidgetProvider.updateRecipeWidgets(this, appWidgetManager, appWidgetIds);
 
         this.finish();
     }
