@@ -20,11 +20,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <ImageView
+            android:id="@+id/iv_recipe_step_thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/player_view"/>
+
+
+
         <TextView
             android:id="@+id/tv_recipe_step_short_desc_frag"
             style="@style/text_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/player_view"
+            app:layout_constraintTop_toBottomOf="@+id/iv_recipe_step_thumbnail"
             tools:text="Short Desc" />
 
         <TextView

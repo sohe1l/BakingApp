@@ -21,8 +21,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".RecipeStepsActivity" />
-        <activity android:name=".RecipeStepActivity" />
+        <activity android:parentActivityName=".MainActivity" android:launchMode="singleTop" android:name=".RecipeStepsActivity" />
+        <activity android:parentActivityName=".RecipeStepsActivity" android:name=".RecipeStepActivity" />
         <activity android:name=".widget.SelectRecipeActivity"/>
 
 

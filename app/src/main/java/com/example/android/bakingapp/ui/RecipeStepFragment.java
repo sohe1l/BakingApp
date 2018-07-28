@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
@@ -27,6 +28,7 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,6 +68,9 @@ public class RecipeStepFragment extends Fragment {
     @BindView(R.id.recipe_step_prev)
     Button mPrevBtn;
 
+    @BindView(R.id.iv_recipe_step_thumbnail)
+    ImageView mThumbnail;
+
 
     SimpleExoPlayer player;
 
@@ -104,6 +109,17 @@ public class RecipeStepFragment extends Fragment {
             step = recipe.getSteps().get(stepIndex);
             mShortDescTV.setText(step.getShortDescription());
             mDescTV.setText(step.getDescription());
+
+            if(step.getThumbnailURL().equals("")){
+                mThumbnail.setVisibility(View.INVISIBLE);
+            }else{
+                Picasso.with(getContext()).load(step.getThumbnailURL())
+                        .placeholder(R.drawable.ic_local_pizza_black_24dp)
+                        .error(R.drawable.ic_error_outline_black_24dp)
+                        .into(mThumbnail);
+                mThumbnail.setVisibility(View.VISIBLE);
+            }
+
             //Update Action Bar Text
             mUpdateActionBarTitle.updateTitle(String.format(getString(R.string.recipe_step_title_bar), recipe.getName(), stepIndex+1 ));
         }catch(Exception e){
@@ -260,11 +276,14 @@ public class RecipeStepFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        exo_position = player.getCurrentPosition();
-        exo_play_when_ready = player.getPlayWhenReady();
-        if (Util.SDK_INT <= 23) {
-            releasePlayer();
+        if(player != null){
+            exo_position = player.getCurrentPosition();
+            exo_play_when_ready = player.getPlayWhenReady();
+            if (Util.SDK_INT <= 23) {
+                releasePlayer();
+            }
         }
+
 
     }
 
