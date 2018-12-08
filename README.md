@@ -1,6 +1,6 @@
 # BakingApp (Android App)
-App that loads different recipies from API using retrofit and shows in navigatable recycler view. Also, it takes benefit of different layout files to better use the space in landscape views. 
-Toy app using different layouts files for portrait and landscape!
+An app that loads different recipes from an API using Retrofit and shows them in a navigatable recycler view. Also, it takes benefit of different layout files to better use the space in the landscape views.
+
 
 
 # Screenshots
